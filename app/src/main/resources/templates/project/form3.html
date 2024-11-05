@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+<header data-th-replace="~{header :: #page-header}"></header>
+
+<h1>프로젝트 등록</h1>
+
+
+<div data-th-unless="${project}">
+    <p>등록할 프로젝트 정보가 없습니다.</p>
+</div>
+
+<div data-th-if="${project}" data-th-object="${project}">
+    <form action='add' method="post">
+        프로젝트명: <span data-th-text="*{title}">프로젝트명</span><br>
+        설명: <textarea data-th-text="*{description}">프로젝트 설명</textarea><br>
+        기간: <span data-th-text="*{startDate}">2024-1-1</span> ~
+              <span data-th-text="*{endDate}">2024-2-2</span><br>
+        팀원:<br>
+            <ul data-th-if="*{members.size() > 0}">
+              <li data-th-each="user : *{members}"
+                  data-th-text="|${user.name}(${user.email})|">홍길동</li>
+            </ul>
+        <button>등록</button>
+    </form>
+</div>
+
+</body>
+</html>

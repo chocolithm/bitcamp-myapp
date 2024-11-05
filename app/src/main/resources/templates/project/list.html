@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+<header data-th-replace="~{header :: #page-header}"></header>
+
+<h1>프로젝트 목록</h1>
+<p><a data-th-href='@{/project/form1}' href="form1.html">새 프로젝트</a></p>
+<table>
+  <thead>
+      <tr><th>번호</th><th>프로젝트</th><th>기간</th></tr>
+  </thead>
+  <tbody>
+    <tr data-th-each="project : ${list}" data-th-object="${project}">
+        <td data-th-text="*{no}">10</td>
+        <td><a data-th-href='@{/project/view(no=*{no})}'
+               data-th-text="*{title}"
+               href="view.html">프로젝트 제목입니다.</a></td>
+        <td data-th-text="|*{startDate} ~ *{endDate}|">2024-1-1 ~ 2024-2-2</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</body>
+</html>

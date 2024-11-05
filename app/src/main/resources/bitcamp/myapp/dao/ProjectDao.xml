@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bitcamp.myapp.dao.ProjectDao">
+
+    <resultMap id="ProjectMap" type="project">
+        <id column="project_id" property="no"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        
+        <collection property="members" ofType="user">
+            <id column="user_id" property="no"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="list" resultMap="ProjectMap">
+        select
+            project_id,
+            title,
+            start_date,
+            end_date
+        from
+            myapp_projects
+        order by
+            project_id asc
+    </select>
+
+    <insert id="insert" parameterType="project"
+            useGeneratedKeys="true" keyColumn="project_id" keyProperty="no">
+        insert into myapp_projects(title,description,start_date,end_date)
+        values (#{title}, #{description}, #{startDate}, #{endDate})
+    </insert>
+
+    <select id="findBy" resultMap="ProjectMap" parameterType="int">
+        select
+            p.project_id,
+            p.title,
+            p.description,
+            p.start_date,
+            p.end_date,
+            pm.user_id,
+            u.name
+        from
+            myapp_projects p
+            left outer join myapp_project_members pm
+                on p.project_id=pm.project_id
+            left outer join myapp_users u
+                on pm.user_id=u.user_id
+        where
+            p.project_id=#{no}
+    </select>
+
+    <update id="update" parameterType="project">
+        update myapp_projects set
+            title=#{title},
+            description=#{description},
+            start_date=#{startDate},
+            end_date=#{endDate}
+        where project_id=#{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from myapp_projects
+        where project_id=#{no}
+    </delete>
+
+    <insert id="insertMembers">
+        insert into myapp_project_members(project_id, user_id)
+        values
+        <foreach collection="members" item="member" separator=",">
+            (#{projectNo}, #{member.no})
+        </foreach>
+    </insert>
+
+    <select id="getMembers" resultType="user" parameterType="int">
+        select
+            pm.user_id as no,
+            u.name
+        from
+            myapp_project_members pm
+            inner join myapp_users u on pm.user_id=u.user_id
+        where
+            pm.project_id=#{no}
+        order by
+            u.name asc
+    </select>
+
+    <delete id="deleteMembers" parameterType="int">
+        delete from myapp_project_members
+        where project_id=#{no}
+    </delete>
+</mapper>

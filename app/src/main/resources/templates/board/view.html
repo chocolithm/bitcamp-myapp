@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+<header data-th-replace="~{header :: #page-header}"></header>
+
+<h1>게시글 조회</h1>
+
+<div data-th-unless="${board}">
+  <p>없는 게시글입니다.</p>
+</div>
+
+<div data-th-if="${board}" data-th-object="${board}">
+  <form action='update' enctype="multipart/form-data" method="post">
+      번호: <input data-th-value='*{no}' name='no' readonly type='text' value="100"><br>
+      제목: <input data-th-value='*{title}' name='title' type='text' value="제목입니다."><br>
+      내용: <textarea data-th-text="*{content}" name='content'>내용입니다.</textarea><br>
+      작성일: <input data-th-value="*{#calendars.format(createdDate, 'yyyy-MM-dd')}" readonly
+                     type='text'
+                     value="2024-1-1"><br>
+      조회수: <input data-th-value='*{viewCount}' readonly type='text' value="11"><br>
+      작성자: <input data-th-value='*{writer.name}' readonly type='text'><br>
+      첨부파일: <br>
+        <ul data-th-if="*{attachedFiles.size() > 0}">
+          <li data-th-each="attachedFile : *{attachedFiles}">
+            <a data-th-href="@{/download(path=board,fileNo=${attachedFile.fileNo})}"
+               data-th-text="${attachedFile.originFilename}">test.pdf</a>
+            <a data-th-href="@{/board/file/delete(boardNo=*{no},fileNo=${attachedFile.fileNo})}">[삭제]</a>
+          </li>
+        </ul>
+      <input multiple name="files" type="file"><br>
+      <button>변경</button>
+      <button data-th-onclick="|deleteBoard(${board.no})|" type='button'>삭제</button>
+  </form>
+</div>
+
+<script>
+    function deleteBoard(no) {
+        location.href = "delete?no=" + no
+    }
+</script>
+</body>
+</html>

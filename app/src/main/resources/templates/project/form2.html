@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+<header data-th-replace="~{header :: #page-header}"></header>
+<h1>프로젝트 등록 - 팀원</h1>
+<form action='form3' method="post">
+  팀원:<br>
+    <ul>
+      <li data-th-each="user : ${users}" data-th-object="${user}">
+          <input data-th-value='*{no}' name='memberNos' type='checkbox' > <span data-th-text="${user.name}">홍길동</span>
+      </li>
+    </ul>
+  <button>다음</button>
+</form>
+
+</body>
+</html>
