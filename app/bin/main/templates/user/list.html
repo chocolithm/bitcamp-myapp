@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+    <header data-th-replace="~{header :: #page-header}"></header>
+
+    <h1>회원 목록</h1>
+    <p><a data-th-href="@{/users/form}" href='form.html'>새 회원</a></p>
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>이메일</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr data-th-each="user : ${list}">
+            <td data-th-text="${user.no}">101</td>
+            <td>
+                <img data-th-src="@{https://cjrh1g594938.edge.naverncp.com/gkjtZfNzjz/user/default.png(type=f,w=20,h=20,quality=90,align=4)}"
+                     data-th-unless="${user.photo}" src="/images/default.png">
+                <img data-th-if="${user.photo}"
+                     data-th-src="@{https://cjrh1g594938.edge.naverncp.com/gkjtZfNzjz/user/} + ${user.photo == null ? 'default.png' : user.photo} + @{?type=f&w=20&h=20&quality=90&align=4}"
+                     src="/images/default.png">
+                <a data-th-href="@{'/users/' + ${user.no}}" data-th-text="${user.name}">홍길동</a></td>
+            <td data-th-text="${user.email}">hong@test.com</td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+</body>
+</html>

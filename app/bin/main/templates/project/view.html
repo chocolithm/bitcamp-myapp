@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head data-th-replace="~{header :: head}"></head>
+<body>
+
+<header data-th-replace="~{header :: #page-header}"></header>
+
+<h1>프로젝트 조회</h1>
+
+<div data-th-unless="${project}">
+    <p>없는 프로젝트입니다.</p>
+</div>
+
+<div data-th-if="${project}" data-th-object="${project}">
+    <form action='update' method="post">
+        번호: <input data-th-value='*{no}' name='no' readonly type='text' value="100"><br>
+        프로젝트명: <input data-th-value='*{title}' name='title' type='text' value="프로젝트명"><br>
+        설명: <textarea data-th-text="*{description}" name='description'>내용입니다.</textarea><br>
+        기간:
+            <input data-th-value='*{startDate}' name='startDate' type='date' value="2024-1-1"> ~
+            <input data-th-value='*{endDate}' name='endDate' type='date' value="2024-2-2"><br>
+        팀원:<br>
+            <ul data-th-if="${users.size() > 0}">
+              <li data-th-each="user : ${users}">
+                  <input data-th-checked="${project.members.contains(user)}"
+                    data-th-text="${user.name}"
+                    data-th-value="${user.no}"
+                    name='memberNos'
+                    type='checkbox'>홍길동</li>
+            </ul>
+        <button>변경</button>
+        <button data-th-onclick="|deleteProject(*{no})|"
+                type='button'>삭제</button>
+    </form>
+</div>
+<script>
+    function deleteProject(no) {
+        location.href = "delete?no=" + no;
+    }
+</script>
+</body>
+</html>
