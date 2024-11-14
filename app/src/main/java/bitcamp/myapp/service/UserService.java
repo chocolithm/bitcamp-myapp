@@ -12,6 +12,8 @@ public interface UserService {
 
   User get(int userNo) throws Exception;
 
+  User get(String email) throws Exception;
+
   User exists(String email, String password) throws Exception;
 
   boolean update(User user) throws Exception;

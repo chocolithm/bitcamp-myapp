@@ -1,4 +1,4 @@
-package bitcamp.myapp.security08;
+package bitcamp.myapp.security09;
 
 import bitcamp.myapp.service.UserService;
 import org.apache.commons.logging.Log;
@@ -12,8 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
   private static final Log log = LogFactory.getLog(SecurityConfig.class);
@@ -27,7 +27,9 @@ public class SecurityConfig {
     http
             .csrf().disable()
             .authorizeHttpRequests((authorize) -> authorize
-                    .anyRequest().authenticated()
+                .mvcMatchers("/", "/home", "/images/**", "/css/**", "/js/**", "*/list", "*/view").permitAll()
+                .mvcMatchers("/users/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
             )
             .formLogin(formLoginConfigurer -> {
               formLoginConfigurer

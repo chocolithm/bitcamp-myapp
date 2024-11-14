@@ -15,6 +15,8 @@ public interface UserDao {
 
   User findBy(int no) throws Exception;
 
+  User findByEmail(String email) throws Exception;
+
   User findByEmailAndPassword(@Param("email") String email, @Param("password") String password) throws Exception;
 
   boolean update(User user) throws Exception;
