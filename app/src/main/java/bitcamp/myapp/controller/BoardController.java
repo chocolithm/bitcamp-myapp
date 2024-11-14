@@ -40,9 +40,6 @@ public class BoardController {
       Board board,
       MultipartFile[] files,
       @LoginUser User loginUser) throws Exception {
-    if (loginUser == null) {
-      throw new Exception("로그인 하지 않았습니다.");
-    }
 
     board.setWriter(loginUser);
 
@@ -188,10 +185,6 @@ public class BoardController {
       @LoginUser User loginUser,
       int fileNo,
       int boardNo) throws Exception {
-
-    if (loginUser == null) {
-      throw new Exception("로그인 하지 않았습니다.");
-    }
 
     AttachedFile attachedFile = boardService.getAttachedFile(fileNo);
     if (attachedFile == null) {

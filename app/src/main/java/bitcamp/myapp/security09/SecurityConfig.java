@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,23 +25,24 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-            .csrf().disable()
-            .authorizeHttpRequests((authorize) -> authorize
-                .mvcMatchers("/", "/home", "/images/**", "/css/**", "/js/**", "*/list", "*/view").permitAll()
-                .mvcMatchers("/users/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(formLoginConfigurer -> {
-              formLoginConfigurer
-                      .loginPage("/auth/form") // 로그인 폼을 제공하는 URL
-                      .loginProcessingUrl("/auth/login") // 클라이언트가 로그인을 하기 위해 요청하는 URL (페이지 컨트롤러와 상관없다)
-                      .usernameParameter("email") // 로그인 수행할 때 사용할 사용자 아이디 또는 이메일(principal) 파라미터 명
-                      .passwordParameter("password") // 로그인 수행할 때 사용할 사용자 암호(credential) 파라미터 명
-                      .successForwardUrl("/auth/success") // 로그인 성공 후 포워딩 할 URL
-                      .permitAll(); // 모든 권한 부여
-            });
-    return http.build();
+    return http
+          .csrf().disable()
+          .authorizeHttpRequests((authorize) -> authorize
+              .mvcMatchers("/", "/home", "/images/**", "/css/**", "/js/**", "*/list", "*/view").permitAll()
+              .mvcMatchers("/users/**").hasRole("ADMIN")
+              .anyRequest().authenticated()
+          )
+          .formLogin(formLoginConfigurer -> {
+            formLoginConfigurer
+                    .loginPage("/auth/form") // 로그인 폼을 제공하는 URL
+                    .loginProcessingUrl("/auth/login") // 클라이언트가 로그인을 하기 위해 요청하는 URL (페이지 컨트롤러와 상관없다)
+                    .usernameParameter("email") // 로그인 수행할 때 사용할 사용자 아이디 또는 이메일(principal) 파라미터 명
+                    .passwordParameter("password") // 로그인 수행할 때 사용할 사용자 암호(credential) 파라미터 명
+                    .successForwardUrl("/auth/success") // 로그인 성공 후 포워딩 할 URL
+                    .permitAll(); // 모든 권한 부여
+          })
+        .logout(Customizer.withDefaults())
+        .build();
   }
 
   @Bean
